@@ -1,0 +1,11 @@
+.Form {
+  width: 50vw;
+  margin: 0 auto;
+}
+
+.form_img_prev {
+  height: 200px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 10px 0;
+}
