@@ -16,7 +16,7 @@ app.use(
     resave: false,
     saveUninitialized: false
   })
-)
+);
 
 // Database
 massive(process.env.CONNECTION_STRING)
@@ -48,6 +48,7 @@ app.post("/api/login", (req, res, next) => {
   db.findUser([username, password])
     .then(user => {
       req.session.user_id = user[0].user_id;
+      console.log(req.session.user_id);
       res.status(200).send(user);
     })
     .catch(err => {
@@ -55,17 +56,17 @@ app.post("/api/login", (req, res, next) => {
     });
 });
 
-app.get("/api/posts/:userid", (req, res, next) => {
+app.get("/api/posts", (req, res, next) => {
   const db = app.get("db");
   const { user_id } = req.session;
   const mine = req.query.mine;
-  let searchString = '%%';
+  let searchString = "%%";
 
   if (req.query.search !== undefined) {
     searchString = `%${req.query.search}%`;
   }
 
-  if (mine && searchString !== '%%') {
+  if (mine && searchString !== "%%") {
     // console.log(mine, searchString);
     // console.log("Include user posts and search string exists")
     db.getPosts(searchString)
@@ -75,9 +76,7 @@ app.get("/api/posts/:userid", (req, res, next) => {
       .catch(err => {
         res.status(500).send(err);
       });
-  }
-
-  else if (mine == undefined && searchString == '%%') {
+  } else if (mine == undefined && searchString == "%%") {
     // console.log(userid, mine, searchString);
     // console.log("Don't include user posts and no search string")
     db.getPostsFilterUser([user_id, searchString])
@@ -87,9 +86,7 @@ app.get("/api/posts/:userid", (req, res, next) => {
       .catch(err => {
         res.status(500).send(err);
       });
-  }
-
-  else if (mine == undefined && searchString !== '%%') {
+  } else if (mine == undefined && searchString !== "%%") {
     // console.log(userid, mine, searchString);
     // console.log("Don't include user posts and search string exists");
     db.getPostsFilterUser([user_id, searchString])
@@ -99,9 +96,7 @@ app.get("/api/posts/:userid", (req, res, next) => {
       .catch(err => {
         res.status(500).send(err);
       });
-  }
-
-  else {
+  } else {
     // console.log(mine, searchString);
     // console.log("Include user posts and no search string")
     db.getPosts(searchString)
@@ -126,9 +121,9 @@ app.get("/api/post/:postid", (req, res, next) => {
     });
 });
 
-app.post("/api/post/:userid", (req, res, next) => {
+app.post("/api/post", (req, res, next) => {
   const db = app.get("db");
-  const user_id = req.session.user_id;
+  const { user_id } = req.session;
   // console.log(userid, req.body);
   // console.log("creating new post...");
   db.addPost([req.body.title, req.body.img, req.body.content, user_id])

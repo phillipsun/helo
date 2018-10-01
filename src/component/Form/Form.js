@@ -16,8 +16,9 @@ class Form extends Component {
   }
 
   submit() {
-    axios.post('/api/post/', this.state)
-      .then(res => this.props.history.push("/dashboard"));
+    axios.post('/api/post', this.state)
+      .then(res => this.props.history.push("/dashboard"))
+      .catch(err => alert('You must log in to create posts'));
   }
 
   render() {

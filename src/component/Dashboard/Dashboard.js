@@ -22,7 +22,7 @@ class Dashboard extends Component {
   }
   grabPosts() {
     let { search, myPosts } = this.state;
-    let url = `/api/posts/${this.props.userId}`;
+    let url = '/api/posts/';
     if (myPosts && !search) {
       url += "?mine=true";
     } else if (!myPosts && search) {
@@ -36,7 +36,7 @@ class Dashboard extends Component {
   }
   reset() {
     let { myPosts } = this.state;
-    let url = '/api/posts/';
+    let url = '/api/posts';
     if (myPosts) {
       url += "?mine=true";
     }
